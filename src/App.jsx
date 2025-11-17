@@ -1,26 +1,41 @@
-import { useState } from 'react'
+import { useRef } from 'react'
+import Hero from './components/Hero'
+import Mission from './components/Mission'
+import Energy from './components/Energy'
+import Waitlist from './components/Waitlist'
+import Footer from './components/Footer'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const waitlistRef = useRef(null)
+  const scrollToWaitlist = () => {
+    waitlistRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
+    <div className="min-h-screen w-full bg-black text-white selection:bg-purple-500/30 selection:text-white">
+      <Hero onCTAClick={scrollToWaitlist} />
+      <Mission />
+      <Energy />
+      <div ref={waitlistRef}>
+        <Waitlist />
       </div>
+      <Footer />
+
+      {/* Micro-animations & keyframes */}
+      <style>{`
+        @keyframes riseSlow { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeSlow { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes orb { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-10px) translateX(6px); } }
+
+        .animate-rise-slow { animation: riseSlow 1600ms ease-out forwards; }
+        .animate-fade-slow { animation: fadeSlow 2000ms ease-out forwards; }
+        .animate-fade-delay { opacity: 0; animation: fadeSlow 2000ms ease-out 200ms forwards; }
+        .animate-fade-delay-2 { opacity: 0; animation: fadeSlow 2000ms ease-out 500ms forwards; }
+        .animate-fade-delay-3 { opacity: 0; animation: fadeSlow 2000ms ease-out 900ms forwards; }
+        .animate-pulse-slow { animation: fadeSlow 2s ease-in-out infinite alternate; }
+        .animate-orb { animation: orb 8s ease-in-out infinite; }
+        .animate-orb-delayed { animation: orb 9.5s ease-in-out infinite; }
+      `}</style>
     </div>
   )
 }
